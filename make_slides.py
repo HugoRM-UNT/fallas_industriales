@@ -5,7 +5,8 @@ from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
 
-R = json.load(open("model/results.json", encoding="utf-8"))
+with open("model/results.json", encoding="utf-8") as results_file:
+    R = json.load(results_file)
 INFO, CFG, W, TS, TE = R["dataset"]["info"], R["config"], R["winner"], R["tuned"], R["test"]
 SYN, MODELS, RK = R["dataset"]["is_synthetic"], list(R["tuned"]), R["ranking_cv"]
 NAVY, RED, GREY = RGBColor(0x1F, 0x3A, 0x5F), RGBColor(0xB3, 0x26, 0x1E), RGBColor(0x55, 0x55, 0x55)

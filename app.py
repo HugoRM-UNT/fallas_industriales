@@ -32,8 +32,14 @@ def load_model():
 
 @st.cache_data
 def load_results():
-    with (MODEL_DIR / "results.json").open(encoding="utf-8") as results_file:
-        return json.load(results_file)
+    results_path = MODEL_DIR / "results.json"
+    raw_results = results_path.read_bytes()
+    try:
+        results_text = raw_results.decode("utf-8")
+    except UnicodeDecodeError:
+        # Older Windows runs wrote JSON using the system code page.
+        results_text = raw_results.decode("cp1252")
+    return json.loads(results_text)
 
 
 @st.cache_data

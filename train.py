@@ -621,5 +621,6 @@ ax.bar(MODES, tot, color="#bdbdbd", label="Fallas en Test"); ax.bar(MODES, mis, 
 ax.set_title("Fallas en Test por modo (un registro puede tener varios)"); ax.legend()
 savefig("fig14_errores_modo")
 
-json.dump(clean(R), open("model/results.json", "w"), indent=2, ensure_ascii=False)
+with open("model/results.json", "w", encoding="utf-8") as results_file:
+    json.dump(clean(R), results_file, indent=2, ensure_ascii=False)
 print(f"Listo en {R['total_time_s'] / 60:.1f} min. Ganador: {winner}")

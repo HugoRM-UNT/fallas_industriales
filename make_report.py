@@ -17,7 +17,8 @@ from reportlab.lib.units import cm
 from reportlab.platypus import (Image, KeepTogether, PageBreak, Paragraph, SimpleDocTemplate, Spacer,
                                 Table, TableStyle, Preformatted)
 
-R = json.load(open("model/results.json", encoding="utf-8"))
+with open("model/results.json", encoding="utf-8") as results_file:
+    R = json.load(results_file)
 INFO = R["dataset"]["info"]
 CFG, W, TS, TE = R["config"], R["winner"], R["tuned"], R["test"]
 SYN = R["dataset"]["is_synthetic"]
