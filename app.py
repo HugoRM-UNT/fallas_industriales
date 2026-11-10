@@ -15,7 +15,7 @@ import joblib
 import pandas as pd
 import streamlit as st
 
-st.set_page_config(page_title="Fallas industriales - Grupo 09", page_icon="🛠️", layout="wide")
+st.set_page_config(page_title="Fallas industriales", page_icon="🛠️", layout="wide")
 
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_DIR = BASE_DIR / "model"
@@ -122,7 +122,7 @@ def training_page():
             st.error("El entrenamiento falló. Revisa el registro de arriba.")
 
 
-st.sidebar.title("🛠️ Grupo 09")
+st.sidebar.title("🛠️ Comparación ML")
 st.sidebar.caption("Detección de fallas en equipos industriales")
 PAGES = ["0. Entrenamiento", "1. Problema y dataset", "2. Análisis exploratorio",
          "3. Base vs. optimizada", "4. Parámetros encontrados",
