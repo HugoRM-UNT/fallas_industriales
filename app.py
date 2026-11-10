@@ -9,6 +9,7 @@ import os
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 
 import joblib
 import pandas as pd
@@ -16,22 +17,28 @@ import streamlit as st
 
 st.set_page_config(page_title="Fallas industriales - Grupo 09", page_icon="🛠️", layout="wide")
 
-HAS_MODEL = os.path.exists("model/results.json") and os.path.exists("model/pipeline.joblib")
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_DIR = BASE_DIR / "model"
+DATA_DIR = BASE_DIR / "data"
+FIGURES_DIR = BASE_DIR / "figures"
+
+HAS_MODEL = (MODEL_DIR / "results.json").exists() and (MODEL_DIR / "pipeline.joblib").exists()
 
 
 @st.cache_resource
 def load_model():
-    return joblib.load("model/pipeline.joblib")
+    return joblib.load(MODEL_DIR / "pipeline.joblib")
 
 
 @st.cache_data
 def load_results():
-    return json.load(open("model/results.json", encoding="utf-8"))
+    with (MODEL_DIR / "results.json").open(encoding="utf-8") as results_file:
+        return json.load(results_file)
 
 
 @st.cache_data
 def load_data(path):
-    return pd.read_csv(path, encoding="utf-8-sig") if os.path.exists(path) else None
+    return pd.read_csv(path, encoding="utf-8-sig") if Path(path).exists() else None
 
 
 if HAS_MODEL:
@@ -42,9 +49,9 @@ if HAS_MODEL:
 
 
 def fig(name, caption=None):
-    p = f"figures/{name}.png"
-    if os.path.exists(p):
-        st.image(p, caption=caption)
+    path = FIGURES_DIR / f"{name}.png"
+    if path.exists():
+        st.image(str(path), caption=caption)
 
 
 PROGRESS = {"[02]": 5, "[04]": 10, "[09-10]": 15, "[11]": 30, "Decision Tree: recall_cv": 40,
@@ -67,25 +74,27 @@ def training_page():
                         help="Si no se marca, se reutilizan resultados guardados con los mismos datos y n_iter.")
     up = c1.file_uploader("CSV propio (opcional; por defecto data/ai4i2020.csv)", type="csv")
     if st.button("Iniciar entrenamiento", type="primary"):
-        data = "data/ai4i2020.csv"
+        data = DATA_DIR / "ai4i2020.csv"
         if up is not None:
-            data = "data/subido.csv"
-            os.makedirs("data", exist_ok=True)
-            open(data, "wb").write(up.getbuffer())
-        if not os.path.exists(data):
+            data = DATA_DIR / "subido.csv"
+            DATA_DIR.mkdir(exist_ok=True)
+            data.write_bytes(up.getbuffer())
+        if not data.exists():
             st.error(f"No existe {data}.")
             return
         if fresh:
-            shutil.rmtree("model/cache", ignore_errors=True)
-        cmds = [[sys.executable, "-u", "train.py", "--n-iter", str(n_iter), "--data", data]]
+            shutil.rmtree(MODEL_DIR / "cache", ignore_errors=True)
+        cmds = [[sys.executable, "-u", str(BASE_DIR / "train.py"), "--n-iter", str(n_iter),
+                 "--data", str(data)]]
         # if docs:
         #    cmds += [[sys.executable, "make_report.py"], [sys.executable, "make_slides.py"]]
         bar, box, log, ok = st.progress(0, text="Iniciando..."), st.empty(), [], True
         env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
         with st.status("Entrenando (puede tardar varios minutos)...", expanded=True) as status:
             for cmd in cmds:
-                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
-                                        encoding="utf-8", errors="replace", env=env)
+                proc = subprocess.Popen(cmd, cwd=BASE_DIR, stdout=subprocess.PIPE,
+                                        stderr=subprocess.STDOUT, text=True, encoding="utf-8",
+                                        errors="replace", env=env)
                 for line in proc.stdout:
                     log.append(line.rstrip())
                     box.code("\n".join(log[-20:]))
