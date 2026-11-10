@@ -1,0 +1,6 @@
+id,descripcion,air_temp,process_temp,rpm,torque,tool_wear,type,prob_falla,alerta,potencia_W,dif_temp_K,desgaste_x_torque
+R1,"Operación nominal, producto M, herramienta casi nueva",299.8,309.9,1540,40.0,15,M,0.001060061774759966,NORMAL,6451.0,10.1,600.0
+R2,"Herramienta muy desgastada con torque alto (riesgo de sobrecarga), tipo L",300.4,310.6,1420,62.0,215,L,0.9994051454175329,ALERTA,9220.0,10.2,13330.0
+R3,Baja velocidad y poca diferencia de temperatura (mala disipación de calor),301.5,309.7,1290,52.0,120,M,0.0019583905817958714,NORMAL,7025.0,8.2,6240.0
+R4,Torque muy bajo con velocidad alta (potencia fuera de rango),298.9,308.7,2050,12.0,60,H,0.9819158187168667,ALERTA,2576.0,9.8,720.0
+R5,"Caso intermedio: desgaste y torque moderados-altos, tipo H",300.9,311.0,1480,48.0,170,H,0.0011363584891697714,NORMAL,7439.0,10.1,8160.0

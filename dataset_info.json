@@ -1,0 +1,13 @@
+{
+  "grupo": "09",
+  "curso": "Sistemas Inteligentes y Machine Learning",
+  "integrantes": ["COMPLETAR: Integrante 1", "COMPLETAR: Integrante 2", "COMPLETAR: Integrante 3"],
+  "nombre": "AI4I 2020 Predictive Maintenance Dataset",
+  "autor": "Stephan Matzka",
+  "url_kaggle": "https://www.kaggle.com/datasets/stephanmatzka/predictive-maintenance-dataset-ai4i-2020",
+  "url_uci": "https://archive.ics.uci.edu/dataset/601/ai4i",
+  "doi": "10.24432/C5HS5C",
+  "licencia": "CC BY 4.0 (según UCI). VERIFICAR la licencia que muestra la página de Kaggle el día del acceso.",
+  "fecha_acceso": "09/11/2026 (archivo entregado por el grupo; confirmar la fecha real de descarga)",
+  "cita": "S. Matzka, \"Explainable Artificial Intelligence for Predictive Maintenance Applications,\" 2020 Third International Conference on Artificial Intelligence for Industries (AI4I), 2020, pp. 69-74, doi: 10.1109/AI4I49448.2020.00023."
+}
